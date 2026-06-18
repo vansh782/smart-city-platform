@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
-  const { login } = useAuth();
+  const { login, register } = useAuth();
   const navigate = useNavigate();
+  const [isRegister, setIsRegister] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,10 +17,14 @@ function Login() {
     setLoading(true);
     setError("");
     try {
-      await login(email, password);
+      if (isRegister) {
+        await register(name, email, password);
+      } else {
+        await login(email, password);
+      }
       navigate("/");
     } catch (err) {
-      setError("Invalid email or password");
+      setError(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -37,6 +43,19 @@ function Login() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {isRegister && (
+            <div>
+              <label className="text-slate-400 text-sm mb-1 block">Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-slate-800 text-white px-4 py-3 rounded-lg border border-slate-700 focus:border-cyan-500 focus:outline-none"
+                placeholder="Your name"
+                required
+              />
+            </div>
+          )}
           <div>
             <label className="text-slate-400 text-sm mb-1 block">Email</label>
             <input
@@ -44,7 +63,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-slate-800 text-white px-4 py-3 rounded-lg border border-slate-700 focus:border-cyan-500 focus:outline-none"
-              placeholder="admin@city.com"
+              placeholder="you@city.com"
               required
             />
           </div>
@@ -64,12 +83,18 @@ function Login() {
             disabled={loading}
             className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition-all disabled:opacity-50"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Please wait..." : isRegister ? "Create Account" : "Sign In"}
           </button>
         </form>
 
-        <p className="text-slate-500 text-xs mt-6 text-center">
-          Demo: vansh@city.com / test1234
+        <p className="text-slate-400 text-sm mt-6 text-center">
+          {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
+          <button
+            onClick={() => { setIsRegister(!isRegister); setError(""); }}
+            className="text-cyan-400 hover:underline"
+          >
+            {isRegister ? "Sign In" : "Register"}
+          </button>
         </p>
       </div>
     </div>
