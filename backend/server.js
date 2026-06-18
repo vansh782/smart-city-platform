@@ -18,8 +18,7 @@ initSocket(server);
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "http://localhost:3000",
-    "https://smart-city-platform.onrender.com"  
+    "https://smart-city-platform-livid.vercel.app"
   ],
   credentials: true
 }));
