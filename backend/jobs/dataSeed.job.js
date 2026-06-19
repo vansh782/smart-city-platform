@@ -2,6 +2,7 @@ const cron = require("node-cron");
 const Sensor = require("../models/Sensor.model");
 const Alert = require("../models/Alert.model");
 const { getIO } = require("../config/socket");
+const { assignAlert } = require("../services/assignment.service");
 
 const SENSORS = [
   { sensorId: "TRAFFIC-001", type: "traffic", unit: "vehicles/min", zone: "Varanasi Central", lat: 25.3176, lng: 82.9739, min: 30, max: 220 },
@@ -47,23 +48,42 @@ const seedData = async () => {
       const existing = await Alert.findOne({
         sensorId: s.sensorId, status: "active"
       });
+
       if (!existing) {
+        const zoneActiveAlertCount = await Alert.countDocuments({
+          "location.zone": s.zone,
+          status: "active",
+        });
+
+        const threshold = status === "critical" ? limits.critical : limits.warning;
+
+        const assignment = assignAlert({
+          type: s.type,
+          severity: status,
+          value,
+          threshold,
+          zoneActiveAlertCount,
+        });
+
         const alert = await Alert.create({
           type: s.type,
           severity: status,
           message: `${s.type.replace("_", " ")} level ${value} exceeded ${status} threshold at ${s.zone}`,
           value,
-          threshold: status === "critical" ? limits.critical : limits.warning,
+          threshold,
           location: { lat: s.lat, lng: s.lng, zone: s.zone },
           sensorId: s.sensorId,
           status: "active",
+          assignedDepartment: assignment.assignedDepartment,
+          assignedRole: assignment.assignedRole,
+          priorityScore: assignment.priorityScore,
         });
 
         try {
           getIO().emit("alert:new", alert);
         } catch (e) {}
 
-        console.log(`Alert created: ${status} ${s.type} at ${s.zone}`);
+        console.log(`Alert created: ${status} ${s.type} at ${s.zone} → assigned to ${assignment.assignedRole} (priority ${assignment.priorityScore})`);
       }
     }
   }

@@ -2,12 +2,13 @@ const Alert = require("../models/Alert.model");
 
 const getAlerts = async (req, res) => {
   try {
-    const { status, type, limit = 50 } = req.query;
+    const { status, type, department, limit = 50 } = req.query;
     const filter = {};
     if (status) filter.status = status;
     if (type) filter.type = type;
+    if (department) filter.assignedDepartment = department;
     const alerts = await Alert.find(filter)
-      .sort({ createdAt: -1 })
+      .sort({ priorityScore: -1, createdAt: -1 }) 
       .limit(Number(limit));
     res.status(200).json({ count: alerts.length, alerts });
   } catch (error) {
@@ -38,7 +39,14 @@ const getAlertStats = async (req, res) => {
     ]);
     const total = await Alert.countDocuments();
     const active = await Alert.countDocuments({ status: "active" });
-    res.status(200).json({ total, active, stats });
+
+    const byDepartment = await Alert.aggregate([
+      { $match: { status: "active" } },
+      { $group: { _id: "$assignedDepartment", count: { $sum: 1 }, avgPriority: { $avg: "$priorityScore" } } },
+      { $sort: { count: -1 } },
+    ]);
+
+    res.status(200).json({ total, active, stats, byDepartment });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
