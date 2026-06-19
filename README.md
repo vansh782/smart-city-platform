@@ -2,8 +2,8 @@
 
 A real-time, full-stack smart city monitoring and management system. Tracks traffic, air quality, energy, water, and waste data live across city zones, auto-detects anomalies, generates alerts, and recommends optimized actions for city administrators.
 
-**🔗 Live Demo:** [Add your Vercel URL here]
-**🔗 Backend API:** [Add your Render URL here]
+**🔗 Live Demo:** smart-city-platform-livid.vercel.app
+**🔗 Backend API:** https://smart-city-platform-1c7g.onrender.com/
 
 ## Demo Credentials
 
