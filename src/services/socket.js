@@ -17,4 +17,4 @@ socket.on("disconnect", () => {
   console.log("Socket disconnected");
 });
 
-export default socket;
+export default socket; 
