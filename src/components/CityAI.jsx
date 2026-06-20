@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import API from "../services/api";
 
 function CityAI() {
@@ -6,6 +6,23 @@ function CityAI() {
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const chatRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (chatRef.current && !chatRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
 
   const handleAsk = async () => {
     if (!question.trim()) return;
@@ -25,8 +42,7 @@ function CityAI() {
   };
 
   return (
-    <>
-      {/* Floating Button — fixed to viewport, always visible regardless of scroll */}
+    <div ref={chatRef}>
       <button
         onClick={() => setOpen(!open)}
         className="fixed bottom-6 right-6 bg-cyan-500 hover:bg-cyan-600 text-white px-5 py-3 rounded-full shadow-xl font-bold z-[9999]"
@@ -34,8 +50,6 @@ function CityAI() {
         🤖 City AI
       </button>
 
-      {/* Chat Window — also fixed, sits ABOVE everything (z-[60]) so it never
-          gets visually trapped behind other dashboard cards */}
       {open && (
         <div className="fixed bottom-24 right-6 w-[380px] max-h-[70vh] overflow-y-auto bg-slate-800 rounded-2xl shadow-2xl p-5 z-[9999] border border-slate-700">
           <div className="flex justify-between items-center mb-4">
@@ -54,6 +68,7 @@ function CityAI() {
             onKeyDown={handleKeyDown}
             placeholder="Ask about traffic, AQI, energy..."
             className="w-full p-3 rounded-lg bg-slate-700 outline-none mb-3 text-white"
+            autoFocus
           />
 
           <button
@@ -75,7 +90,7 @@ function CityAI() {
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
