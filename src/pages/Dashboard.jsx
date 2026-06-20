@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import TrendPrediction from "../components/TrendPrediction";
 import Navbar from "../components/Navbar";
 import TrafficChart from "../components/TrafficChart";
 import HealthScore from "../components/HealthScore";
@@ -150,6 +151,11 @@ function Dashboard() {
           </div>
         )}
       </div>
+
+{/* Trend Predictions */}
+<div className="mt-8">
+  <TrendPrediction />
+</div>
 
       {/* AI Recommendations */}
       <div className="mt-8">

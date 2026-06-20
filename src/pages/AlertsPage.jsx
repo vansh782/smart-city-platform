@@ -36,6 +36,11 @@ function AlertsPage() {
     severity === "warning"  ? "border-yellow-500 bg-yellow-500/10" :
     "border-blue-500 bg-blue-500/10";
 
+  const priorityColor = (score) =>
+    score >= 70 ? "text-red-400" :
+    score >= 40 ? "text-yellow-400" :
+    "text-green-400";
+
   return (
     <div className="p-8 text-white">
       <div className="flex items-center justify-between mb-8">
@@ -97,7 +102,27 @@ function AlertsPage() {
                   </button>
                 )}
               </div>
-              <p className="text-white text-sm mb-2">{alert.message}</p>
+
+              <p className="text-white text-sm mb-3">{alert.message}</p>
+
+              {/* AI Auto-Assignment block */}
+              {alert.assignedDepartment && (
+                <div className="bg-slate-800/60 rounded-lg p-3 mb-3 flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-slate-400">Auto-assigned to</p>
+                    <p className="text-sm text-cyan-400 font-semibold capitalize">
+                      {alert.assignedRole}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-slate-400">Priority score</p>
+                    <p className={`text-lg font-bold ${priorityColor(alert.priorityScore)}`}>
+                      {alert.priorityScore}/100
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <div className="flex justify-between text-xs text-slate-400 mt-3">
                 <span>📍 {alert.location?.zone}</span>
                 <span>{new Date(alert.createdAt).toLocaleString()}</span>
