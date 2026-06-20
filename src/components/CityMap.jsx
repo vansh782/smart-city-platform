@@ -92,7 +92,10 @@ function CityMap() {
 
   return (
     <div className="bg-slate-800 rounded-2xl p-4 mt-8">
-      <h2 className="text-2xl font-bold mb-4 text-white">Live City Map</h2>
+      <div className="flex items-center justify-between mb-4">
+  <h2 className="text-2xl font-bold text-white">Live City Map</h2>
+  <span className="text-xs text-slate-400">Use +/− or double-click to zoom</span>
+</div>
 
       <div className="flex gap-6 mb-4 flex-wrap text-white">
         {Object.entries(TYPE_LABELS).map(([type, { emoji, label }]) => (
@@ -112,10 +115,11 @@ function CityMap() {
         <p className="text-slate-400 p-8">Loading map data...</p>
       ) : (
         <MapContainer
-          center={[25.3176, 82.9739]}
-          zoom={13}
-          style={{ height: "500px", width: "100%", borderRadius: "15px" }}
-        >
+  center={[25.3176, 82.9739]}
+  zoom={13}
+  scrollWheelZoom={false}
+  style={{ height: "450px", width: "100%", borderRadius: "15px" }}
+>
           <TileLayer
             attribution="&copy; OpenStreetMap"
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
