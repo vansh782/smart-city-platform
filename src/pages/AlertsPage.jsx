@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import API from "../services/api";
 import { FaBell } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import ConfirmModal from "../components/ConfirmModal";
 
 function AlertsPage() {
+  const [confirmId, setConfirmId] = useState(null);
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("active");
@@ -103,7 +105,7 @@ function AlertsPage() {
                   </div>
                   {filter === "active" && (
                     <button
-                      onClick={() => resolveAlert(alert._id)}
+                      onClick={() => setConfirmId(alert._id)}
                       className="text-xs bg-slate-800 hover:bg-green-500/20 hover:text-green-400 text-slate-300 px-3 py-1 rounded-lg transition-all"
                     >
                       Resolve ✓
@@ -144,6 +146,17 @@ function AlertsPage() {
           </AnimatePresence>
         </div>
       )}
+      
+      <ConfirmModal
+  open={!!confirmId}
+  title="Resolve this alert?"
+  message="This will mark the alert as resolved and remove it from the active list."
+  onConfirm={() => {
+    resolveAlert(confirmId);
+    setConfirmId(null);
+  }}
+  onCancel={() => setConfirmId(null)}
+/>
     </div>
   );
 }

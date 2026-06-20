@@ -26,7 +26,9 @@ function StatCard({ title, numericValue, unit, icon, status, index }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
       whileHover={{ y: -4, transition: { duration: 0.15 } }}
-      className={`bg-slate-900 rounded-2xl p-5 border ${statusColor} cursor-default`}
+      className={`bg-slate-900 rounded-2xl p-5 border ${statusColor} cursor-default glow-card ${
+  status === "critical" ? "glow-critical" : status === "warning" ? "glow-warning" : ""
+}`}
     >
       <motion.div
         className="text-cyan-400 text-2xl mb-2"

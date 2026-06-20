@@ -39,7 +39,7 @@ function Layout() {
   const location = useLocation();
 
   return (
-    <div className="flex min-h-screen bg-slate-950 text-white">
+    <div className="flex min-h-screen animated-bg text-white">
       <Sidebar />
       <div className="flex-1 overflow-y-auto">
         <AnimatePresence mode="wait">
