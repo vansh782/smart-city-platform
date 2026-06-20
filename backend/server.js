@@ -6,6 +6,7 @@ dotenv.config();
 const connectDB = require("./config/db");
 const { initSocket } = require("./config/socket");
 const authRoutes = require("./routes/authRoutes");
+const aiRoutes = require("./routes/ai.routes");
 const sensorRoutes = require("./routes/sensor.routes");
 const alertRoutes = require("./routes/alert.routes");
 const resourceRoutes = require("./routes/resource.routes");
@@ -24,6 +25,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use("/api/auth", authRoutes);
+app.use("/api/ai", aiRoutes);
 app.use("/api/sensors", sensorRoutes);
 app.use("/api/alerts", alertRoutes);
 app.use("/api/resources", resourceRoutes);
