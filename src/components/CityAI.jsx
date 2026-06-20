@@ -29,7 +29,7 @@ function CityAI() {
       {/* Floating Button — fixed to viewport, always visible regardless of scroll */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 bg-cyan-500 hover:bg-cyan-600 text-white px-5 py-3 rounded-full shadow-xl font-bold z-[60]"
+        className="fixed bottom-6 right-6 bg-cyan-500 hover:bg-cyan-600 text-white px-5 py-3 rounded-full shadow-xl font-bold z-[9999]"
       >
         🤖 City AI
       </button>
@@ -37,7 +37,7 @@ function CityAI() {
       {/* Chat Window — also fixed, sits ABOVE everything (z-[60]) so it never
           gets visually trapped behind other dashboard cards */}
       {open && (
-        <div className="fixed bottom-24 right-6 w-[380px] max-h-[70vh] overflow-y-auto bg-slate-800 rounded-2xl shadow-2xl p-5 z-[60] border border-slate-700">
+        <div className="fixed bottom-24 right-6 w-[380px] max-h-[70vh] overflow-y-auto bg-slate-800 rounded-2xl shadow-2xl p-5 z-[9999] border border-slate-700">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-white">Smart City AI Assistant</h2>
             <button
